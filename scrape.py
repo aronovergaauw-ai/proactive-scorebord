@@ -17,7 +17,7 @@ def haal_scores_op():
         page.keyboard.press("Enter")
         page.wait_for_url("**/tabs/**", timeout=15000)
 
-        # 2. Ga naar de poule en VANG de onzichtbare data op (nu specifiek de API!)
+        # 2. Vang de onzichtbare data op
         with page.expect_response(lambda response: "api.sportspoule.com/groups/4285" in response.url and response.request.method == "GET") as response_info:
             page.goto("https://app.sportspoule.com/tabs/groups/4285")
         
@@ -28,51 +28,97 @@ def haal_scores_op():
         # 4. Sorteer deelnemers op punten (hoogste eerst)
         deelnemers.sort(key=lambda x: x.get('points', 0), reverse=True)
 
-        # 5. Bouw de rijen voor de tabel
-        tabel_rijen = ""
-        for positie, user in enumerate(deelnemers, start=1):
-            naam = user.get('name', 'Onbekend')
+        # --- NIEUW: Splits de groep in tweeën voor de 2 kolommen ---
+        midden = (len(deelnemers) + 1) // 2
+        groep1 = deelnemers[:midden]
+        groep2 = deelnemers[midden:]
+
+        def bouw_rij(user, positie):
+            # Achternaam wegfilteren door alleen het eerste woord te pakken
+            volledige_naam = user.get('name', 'Onbekend')
+            voornaam = volledige_naam.split()[0]
             punten = user.get('points', 0)
             
-            # Geef de top 3 een kroontje of medaille
             icoon = ""
-            if positie == 1: icoon = "🏆 "
-            elif positie == 2: icoon = "🥈 "
-            elif positie == 3: icoon = "🥉 "
+            rij_class = ""
             
-            tabel_rijen += f"<tr><td>{positie}</td><td>{icoon}{naam}</td><td><strong>{punten}</strong></td></tr>\n"
+            # Geef de top 3 een speciale opmaak
+            if positie == 1: 
+                icoon = "🏆 "
+                rij_class = ' class="podium-1"'
+            elif positie == 2: 
+                icoon = "🥈 "
+                rij_class = ' class="podium-2"'
+            elif positie == 3: 
+                icoon = "🥉 "
+                rij_class = ' class="podium-3"'
+            
+            return f"<tr{rij_class}><td>{positie}</td><td>{icoon}{voornaam}</td><td><strong>{punten}</strong></td></tr>\n"
 
-        # 6. Bouw de uiteindelijke HTML (Groot en opgemaakt voor een TV scherm!)
+        # Bouw de twee losse tabellen op
+        tabel1_rijen = ""
+        for i, user in enumerate(groep1, start=1):
+            tabel1_rijen += bouw_rij(user, i)
+            
+        tabel2_rijen = ""
+        for i, user in enumerate(groep2, start=midden + 1):
+            tabel2_rijen += bouw_rij(user, i)
+
+        # 6. Bouw de HTML (Twee kolommen & Breedbeeld TV Modus!)
         webpagina = f"""
         <html>
             <head>
                 <title>ProActive Scorebord</title>
                 <meta http-equiv="refresh" content="900"> 
                 <style>
-                    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f5; padding: 40px; color: #333; }}
-                    h1 {{ text-align: center; color: #2c3e50; font-size: 4em; margin-bottom: 20px; }}
-                    .container {{ background: white; padding: 40px; border-radius: 20px; max-width: 1000px; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }}
-                    table {{ width: 100%; border-collapse: collapse; font-size: 2em; }}
-                    th, td {{ padding: 20px; text-align: left; border-bottom: 2px solid #eee; }}
-                    th {{ background-color: #004b87; color: white; }}
+                    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f5; margin: 0; padding: 2vh 2vw; color: #333; overflow: hidden; }}
+                    h1 {{ text-align: center; color: #2c3e50; font-size: 6vh; margin: 1vh 0 3vh 0; }}
+                    .container {{ background: white; padding: 3vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box; }}
+                    
+                    /* Layout voor de twee tabellen naast elkaar */
+                    .twee-kolommen {{ display: flex; gap: 4vw; justify-content: space-between; }}
+                    
+                    table {{ width: 48%; border-collapse: collapse; font-size: 3.5vh; }}
+                    th, td {{ padding: 1.5vh 1.5vw; text-align: left; border-bottom: 2px solid #eee; }}
+                    th {{ background-color: #004b87; color: white; font-size: 4vh; }}
                     tr:nth-child(even) {{ background-color: #f9f9fc; }}
+                    
+                    /* Styling top 3 */
+                    .podium-1 td {{ font-weight: bold; background-color: #fff8e1; color: #b8860b; font-size: 3.8vh; }}
+                    .podium-2 td {{ font-weight: bold; color: #7f8c8d; font-size: 3.6vh; }}
+                    .podium-3 td {{ font-weight: bold; color: #d35400; font-size: 3.6vh; }}
                 </style>
             </head>
             <body>
                 <div class="container">
                     <h1>⚽ ProActive WK Poule ⚽</h1>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Naam</th>
-                                <th>Punten</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tabel_rijen}
-                        </tbody>
-                    </table>
+                    <div class="twee-kolommen">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Naam</th>
+                                    <th>Punten</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tabel1_rijen}
+                            </tbody>
+                        </table>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Naam</th>
+                                    <th>Punten</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tabel2_rijen}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </body>
         </html>
