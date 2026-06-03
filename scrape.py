@@ -28,32 +28,28 @@ def haal_scores_op():
         # 4. Sorteer deelnemers op punten (hoogste eerst)
         deelnemers.sort(key=lambda x: x.get('points', 0), reverse=True)
 
-        # --- NIEUW: Splits de groep in tweeën voor de 2 kolommen ---
+        # 5. Splits de groep in tweeën voor de 2 kolommen
         midden = (len(deelnemers) + 1) // 2
         groep1 = deelnemers[:midden]
         groep2 = deelnemers[midden:]
 
         def bouw_rij(user, positie):
-            # Achternaam wegfilteren door alleen het eerste woord te pakken
-            volledige_naam = user.get('name', 'Onbekend')
+            # Achternaam wegfilteren en naar het Engels
+            volledige_naam = user.get('name', 'Unknown')
             voornaam = volledige_naam.split()[0]
             punten = user.get('points', 0)
             
-            icoon = ""
             rij_class = ""
             
-            # Geef de top 3 een speciale opmaak
+            # Geef de top 3 een speciale (donkere) opmaak zonder icoontjes
             if positie == 1: 
-                icoon = "🏆 "
                 rij_class = ' class="podium-1"'
             elif positie == 2: 
-                icoon = "🥈 "
                 rij_class = ' class="podium-2"'
             elif positie == 3: 
-                icoon = "🥉 "
                 rij_class = ' class="podium-3"'
             
-            return f"<tr{rij_class}><td>{positie}</td><td>{icoon}{voornaam}</td><td><strong>{punten}</strong></td></tr>\n"
+            return f"<tr{rij_class}><td>{positie}</td><td>{voornaam}</td><td><strong>{punten}</strong></td></tr>\n"
 
         # Bouw de twee losse tabellen op
         tabel1_rijen = ""
@@ -64,41 +60,42 @@ def haal_scores_op():
         for i, user in enumerate(groep2, start=midden + 1):
             tabel2_rijen += bouw_rij(user, i)
 
-        # 6. Bouw de HTML (Twee kolommen & Breedbeeld TV Modus!)
+        # 6. Bouw de HTML (Dark Mode, English, TV Modus)
         webpagina = f"""
         <html>
             <head>
-                <title>ProActive Scorebord</title>
+                <title>ProActive Scoreboard</title>
                 <meta http-equiv="refresh" content="900"> 
                 <style>
-                    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f5; margin: 0; padding: 2vh 2vw; color: #333; overflow: hidden; }}
-                    h1 {{ text-align: center; color: #2c3e50; font-size: 6vh; margin: 1vh 0 3vh 0; }}
-                    .container {{ background: white; padding: 3vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.1); box-sizing: border-box; }}
+                    /* Dark Mode kleuren en reset */
+                    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 2vh 2vw; color: #e0e0e0; overflow: hidden; }}
+                    h1 {{ text-align: center; color: #ffffff; font-size: 6vh; margin: 1vh 0 3vh 0; letter-spacing: 2px; text-transform: uppercase; }}
+                    .container {{ background: #1e1e1e; padding: 3vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }}
                     
                     /* Layout voor de twee tabellen naast elkaar */
                     .twee-kolommen {{ display: flex; gap: 4vw; justify-content: space-between; }}
                     
                     table {{ width: 48%; border-collapse: collapse; font-size: 3.5vh; }}
-                    th, td {{ padding: 1.5vh 1.5vw; text-align: left; border-bottom: 2px solid #eee; }}
-                    th {{ background-color: #004b87; color: white; font-size: 4vh; }}
-                    tr:nth-child(even) {{ background-color: #f9f9fc; }}
+                    th, td {{ padding: 1.5vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }}
+                    th {{ background-color: #2c3e50; color: #ffffff; font-size: 4vh; text-transform: uppercase; }}
+                    tr:nth-child(even) {{ background-color: #252525; }}
                     
-                    /* Styling top 3 */
-                    .podium-1 td {{ font-weight: bold; background-color: #fff8e1; color: #b8860b; font-size: 3.8vh; }}
-                    .podium-2 td {{ font-weight: bold; color: #7f8c8d; font-size: 3.6vh; }}
-                    .podium-3 td {{ font-weight: bold; color: #d35400; font-size: 3.6vh; }}
+                    /* Styling top 3 (Dark Mode variant) */
+                    .podium-1 td {{ font-weight: bold; background-color: #3a2e00; color: #ffd700; font-size: 3.8vh; }}
+                    .podium-2 td {{ font-weight: bold; color: #cccccc; font-size: 3.6vh; }}
+                    .podium-3 td {{ font-weight: bold; color: #cd7f32; font-size: 3.6vh; }}
                 </style>
             </head>
             <body>
                 <div class="container">
-                    <h1>⚽ ProActive WK Poule ⚽</h1>
+                    <h1>ProActive World Cup Poule</h1>
                     <div class="twee-kolommen">
                         <table>
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Naam</th>
-                                    <th>Punten</th>
+                                    <th>Name</th>
+                                    <th>Points</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -110,8 +107,8 @@ def haal_scores_op():
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Naam</th>
-                                    <th>Punten</th>
+                                    <th>Name</th>
+                                    <th>Points</th>
                                 </tr>
                             </thead>
                             <tbody>
