@@ -4,28 +4,27 @@
                 <title>ProActive Scoreboard</title>
                 <meta http-equiv="refresh" content="900"> 
                 <style>
-                    /* Dark Mode kleuren en reset */
                     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 2vh 2vw; color: #e0e0e0; overflow: hidden; }
-                    h1 { text-align: center; color: #ffffff; font-size: 6vh; margin: 1vh 0 3vh 0; letter-spacing: 2px; text-transform: uppercase; }
-                    .container { background: #1e1e1e; padding: 3vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }
+                    h1 { text-align: center; color: #ffffff; font-size: 5vh; margin: 1vh 0 2vh 0; letter-spacing: 2px; text-transform: uppercase; }
+                    .container { background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }
                     
-                    /* Layout voor de twee tabellen naast elkaar */
                     .twee-kolommen { display: flex; gap: 4vw; justify-content: space-between; }
                     
-                    table { width: 48%; border-collapse: collapse; font-size: 3.5vh; }
-                    th, td { padding: 1.5vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }
-                    th { background-color: #2c3e50; color: #ffffff; font-size: 4vh; text-transform: uppercase; }
+                    /* Tekstgrootte verlaagd van 3.5vh naar 2.6vh voor meer rijen */
+                    table { width: 48%; border-collapse: collapse; font-size: 2.6vh; }
+                    th, td { padding: 1vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }
+                    th { background-color: #2c3e50; color: #ffffff; font-size: 3vh; text-transform: uppercase; }
                     tr:nth-child(even) { background-color: #252525; }
                     
-                    /* Styling top 3 (Dark Mode variant) */
-                    .podium-1 td { font-weight: bold; background-color: #3a2e00; color: #ffd700; font-size: 3.8vh; }
-                    .podium-2 td { font-weight: bold; color: #cccccc; font-size: 3.6vh; }
-                    .podium-3 td { font-weight: bold; color: #cd7f32; font-size: 3.6vh; }
+                    /* Gekleurde top 3 blijft behouden */
+                    .podium-1 td { font-weight: bold; background-color: #3a2e00; color: #ffd700; }
+                    .podium-2 td { font-weight: bold; color: #cccccc; }
+                    .podium-3 td { font-weight: bold; color: #cd7f32; }
                 </style>
             </head>
             <body>
                 <div class="container">
-                    <h1>ProActive World Cup Poule</h1>
+                    <h1>ProActive World Cup Leaderboard</h1>
                     <div class="twee-kolommen">
                         <table>
                             <thead>
