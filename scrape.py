@@ -28,26 +28,23 @@ def haal_scores_op():
         # 4. Sorteer deelnemers op punten (hoogste eerst)
         deelnemers.sort(key=lambda x: x.get('points', 0), reverse=True)
 
-        # 5. Splits de groep in tweeën voor de 2 kolommen
+        # --- UPDATE: Beperk de lijst tot de TOP 30 ---
+        deelnemers = deelnemers[:30]
+
+        # 5. Splits de groep in tweeën voor de 2 kolommen (max 15 per kolom)
         midden = (len(deelnemers) + 1) // 2
         groep1 = deelnemers[:midden]
         groep2 = deelnemers[midden:]
 
         def bouw_rij(user, positie):
-            # Achternaam wegfilteren en naar het Engels
             volledige_naam = user.get('name', 'Unknown')
             voornaam = volledige_naam.split()[0]
             punten = user.get('points', 0)
             
             rij_class = ""
-            
-            # Geef de top 3 een speciale (donkere) opmaak zonder icoontjes
-            if positie == 1: 
-                rij_class = ' class="podium-1"'
-            elif positie == 2: 
-                rij_class = ' class="podium-2"'
-            elif positie == 3: 
-                rij_class = ' class="podium-3"'
+            if positie == 1: rij_class = ' class="podium-1"'
+            elif positie == 2: rij_class = ' class="podium-2"'
+            elif positie == 3: rij_class = ' class="podium-3"'
             
             return f"<tr{rij_class}><td>{positie}</td><td>{voornaam}</td><td><strong>{punten}</strong></td></tr>\n"
 
@@ -60,35 +57,34 @@ def haal_scores_op():
         for i, user in enumerate(groep2, start=midden + 1):
             tabel2_rijen += bouw_rij(user, i)
 
-        # 6. Bouw de HTML (Dark Mode, English, TV Modus)
+        # 6. Bouw de HTML (Compactere TV Modus voor 30 man)
         webpagina = f"""
         <html>
             <head>
                 <title>ProActive Scoreboard</title>
                 <meta http-equiv="refresh" content="900"> 
                 <style>
-                    /* Dark Mode kleuren en reset */
                     body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 2vh 2vw; color: #e0e0e0; overflow: hidden; }}
-                    h1 {{ text-align: center; color: #ffffff; font-size: 6vh; margin: 1vh 0 3vh 0; letter-spacing: 2px; text-transform: uppercase; }}
-                    .container {{ background: #1e1e1e; padding: 3vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }}
+                    h1 {{ text-align: center; color: #ffffff; font-size: 5vh; margin: 1vh 0 2vh 0; letter-spacing: 2px; text-transform: uppercase; }}
+                    .container {{ background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }}
                     
-                    /* Layout voor de twee tabellen naast elkaar */
                     .twee-kolommen {{ display: flex; gap: 4vw; justify-content: space-between; }}
                     
-                    table {{ width: 48%; border-collapse: collapse; font-size: 3.5vh; }}
-                    th, td {{ padding: 1.5vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }}
-                    th {{ background-color: #2c3e50; color: #ffffff; font-size: 4vh; text-transform: uppercase; }}
+                    /* Tekstgrootte verlaagd van 3.5vh naar 2.6vh voor meer rijen */
+                    table {{ width: 48%; border-collapse: collapse; font-size: 2.6vh; }}
+                    th, td {{ padding: 1vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }}
+                    th {{ background-color: #2c3e50; color: #ffffff; font-size: 3vh; text-transform: uppercase; }}
                     tr:nth-child(even) {{ background-color: #252525; }}
                     
-                    /* Styling top 3 (Dark Mode variant) */
-                    .podium-1 td {{ font-weight: bold; background-color: #3a2e00; color: #ffd700; font-size: 3.8vh; }}
-                    .podium-2 td {{ font-weight: bold; color: #cccccc; font-size: 3.6vh; }}
-                    .podium-3 td {{ font-weight: bold; color: #cd7f32; font-size: 3.6vh; }}
+                    /* Gekleurde top 3 blijft behouden */
+                    .podium-1 td {{ font-weight: bold; background-color: #3a2e00; color: #ffd700; }}
+                    .podium-2 td {{ font-weight: bold; color: #cccccc; }}
+                    .podium-3 td {{ font-weight: bold; color: #cd7f32; }}
                 </style>
             </head>
             <body>
                 <div class="container">
-                    <h1>ProActive World Cup Poule</h1>
+                    <h1>ProActive World Cup Leaderboard</h1>
                     <div class="twee-kolommen">
                         <table>
                             <thead>
