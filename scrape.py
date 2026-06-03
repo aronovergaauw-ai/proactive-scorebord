@@ -17,8 +17,8 @@ def haal_scores_op():
         page.keyboard.press("Enter")
         page.wait_for_url("**/tabs/**", timeout=15000)
 
-        # 2. Ga naar de poule en VANG de onzichtbare data op!
-        with page.expect_response(lambda response: "groups/4285" in response.url) as response_info:
+        # 2. Ga naar de poule en VANG de onzichtbare data op (nu specifiek de API!)
+        with page.expect_response(lambda response: "api.sportspoule.com/groups/4285" in response.url and response.request.method == "GET") as response_info:
             page.goto("https://app.sportspoule.com/tabs/groups/4285")
         
         # 3. Lees de data
