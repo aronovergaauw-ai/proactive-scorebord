@@ -13,7 +13,9 @@ def haal_scores_op():
         page.goto("https://app.sportspoule.com/login")
         page.fill("input[type='email']", email)
         page.fill("input[type='password']", wachtwoord)
-        page.click("button[type='submit']")
+        
+        # In plaats van zoeken naar de knop, drukken we op Enter!
+        page.keyboard.press("Enter")
 
         # Wacht tot we ingelogd zijn en ga naar de poule
         page.wait_for_url("**/tabs/**", timeout=15000)
