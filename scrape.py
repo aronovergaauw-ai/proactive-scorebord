@@ -28,6 +28,14 @@ def haal_scores_op():
         # 4. Sorteer deelnemers op punten (hoogste eerst)
         deelnemers.sort(key=lambda x: x.get('points', 0), reverse=True)
 
+        # --- AANGEPAST: Alleen 'beheerder' uitsluiten ---
+        namen_uitsluiten = ["beheerder"]
+        
+        deelnemers = [
+            user for user in deelnemers 
+            if not any(naam in user.get('name', '').lower() for naam in namen_uitsluiten)
+        ]
+
         # Beperk de lijst tot de TOP 30
         deelnemers = deelnemers[:30]
 
@@ -57,7 +65,7 @@ def haal_scores_op():
         for i, user in enumerate(groep2, start=midden + 1):
             tabel2_rijen += bouw_rij(user, i)
 
-        # 6. Bouw de HTML (Volledig anoniem)
+        # 6. Bouw de HTML
         webpagina = f"""
         <html>
             <head>
