@@ -6,7 +6,7 @@
                 <style>
                     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 2vh 2vw; color: #e0e0e0; overflow: hidden; }
                     h1 { text-align: center; color: #ffffff; font-size: 5vh; margin: 1vh 0 2vh 0; letter-spacing: 2px; text-transform: uppercase; }
-                    .container { background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }
+                    .container { background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; }
                     .twee-kolommen { display: flex; gap: 4vw; justify-content: space-between; }
                     table { width: 48%; border-collapse: collapse; font-size: 2.6vh; }
                     th, td { padding: 1vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }
@@ -15,6 +15,9 @@
                     .podium-1 td { font-weight: bold; background-color: #3a2e00; color: #ffd700; }
                     .podium-2 td { font-weight: bold; color: #cccccc; }
                     .podium-3 td { font-weight: bold; color: #cd7f32; }
+                    
+                    /* Styling voor de tijdstempel linksonder */
+                    .tijdstempel { position: fixed; bottom: 2vh; left: 2vw; font-size: 1.8vh; color: #7f8c8d; font-style: italic; }
                 </style>
             </head>
             <body>
@@ -63,11 +66,13 @@
 <tr><td>19</td><td>Rik</td><td><strong>0</strong></td></tr>
 <tr><td>20</td><td>Daan</td><td><strong>0</strong></td></tr>
 <tr><td>21</td><td>Rafi</td><td><strong>0</strong></td></tr>
+<tr><td>22</td><td>ProlonGeert</td><td><strong>0</strong></td></tr>
 
                             </tbody>
                         </table>
                     </div>
                 </div>
+                <div class="tijdstempel">Last updated: 05-06-2026 10:29</div>
             </body>
         </html>
         
