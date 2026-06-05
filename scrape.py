@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
 import os
 import json
+from datetime import datetime, timedelta
 
 def haal_scores_op():
     email = os.environ.get('SPOULE_EMAIL')
@@ -28,7 +29,7 @@ def haal_scores_op():
         # 4. Sorteer deelnemers op punten (hoogste eerst)
         deelnemers.sort(key=lambda x: x.get('points', 0), reverse=True)
 
-        # --- AANGEPAST: Alleen 'beheerder' uitsluiten ---
+        # --- Filter ongewenste namen ('beheerder') eruit ---
         namen_uitsluiten = ["beheerder"]
         
         deelnemers = [
@@ -65,6 +66,10 @@ def haal_scores_op():
         for i, user in enumerate(groep2, start=midden + 1):
             tabel2_rijen += bouw_rij(user, i)
 
+        # --- Bepaal de huidige tijd (Nederlandse zomertijd: UTC + 2) ---
+        nu = datetime.utcnow() + timedelta(hours=2)
+        tijdstempel = nu.strftime("%d-%m-%Y %H:%M")
+
         # 6. Bouw de HTML
         webpagina = f"""
         <html>
@@ -74,7 +79,7 @@ def haal_scores_op():
                 <style>
                     body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 2vh 2vw; color: #e0e0e0; overflow: hidden; }}
                     h1 {{ text-align: center; color: #ffffff; font-size: 5vh; margin: 1vh 0 2vh 0; letter-spacing: 2px; text-transform: uppercase; }}
-                    .container {{ background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; }}
+                    .container {{ background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; }}
                     .twee-kolommen {{ display: flex; gap: 4vw; justify-content: space-between; }}
                     table {{ width: 48%; border-collapse: collapse; font-size: 2.6vh; }}
                     th, td {{ padding: 1vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }}
@@ -83,6 +88,9 @@ def haal_scores_op():
                     .podium-1 td {{ font-weight: bold; background-color: #3a2e00; color: #ffd700; }}
                     .podium-2 td {{ font-weight: bold; color: #cccccc; }}
                     .podium-3 td {{ font-weight: bold; color: #cd7f32; }}
+                    
+                    /* Styling voor de tijdstempel linksonder */
+                    .tijdstempel {{ position: fixed; bottom: 2vh; left: 2vw; font-size: 1.8vh; color: #7f8c8d; font-style: italic; }}
                 </style>
             </head>
             <body>
@@ -115,6 +123,7 @@ def haal_scores_op():
                         </table>
                     </div>
                 </div>
+                <div class="tijdstempel">Last updated: {tijdstempel}</div>
             </body>
         </html>
         """
