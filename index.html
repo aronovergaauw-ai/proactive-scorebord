@@ -2,22 +2,26 @@
         <html>
             <head>
                 <title>World Cup Scoreboard</title>
-                <meta http-equiv="refresh" content="900"> 
+                <meta http-equiv="refresh" content="300"> 
                 <style>
-                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 2vh 2vw; color: #e0e0e0; overflow: hidden; }
-                    h1 { text-align: center; color: #ffffff; font-size: 5vh; margin: 1vh 0 2vh 0; letter-spacing: 2px; text-transform: uppercase; }
-                    .container { background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; }
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 1.5vh 2vw; color: #e0e0e0; overflow: hidden; }
+                    
+                    /* Titels en marges iets kleiner gemaakt voor meer ruimte */
+                    h1 { text-align: center; color: #ffffff; font-size: 4vh; margin: 0.5vh 0 1.5vh 0; letter-spacing: 2px; text-transform: uppercase; }
+                    .container { background: #1e1e1e; padding: 1.5vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; }
                     .twee-kolommen { display: flex; gap: 4vw; justify-content: space-between; }
-                    table { width: 48%; border-collapse: collapse; font-size: 2.6vh; }
-                    th, td { padding: 1vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }
-                    th { background-color: #2c3e50; color: #ffffff; font-size: 3vh; text-transform: uppercase; }
+                    
+                    /* Tabelrijen en tekst compacter gemaakt (20 rijen per kolom) */
+                    table { width: 48%; border-collapse: collapse; font-size: 2.2vh; }
+                    th, td { padding: 0.6vh 1vw; text-align: left; border-bottom: 1px solid #333333; }
+                    th { background-color: #2c3e50; color: #ffffff; font-size: 2.4vh; text-transform: uppercase; padding: 1vh 1vw; }
                     tr:nth-child(even) { background-color: #252525; }
+                    
                     .podium-1 td { font-weight: bold; background-color: #3a2e00; color: #ffd700; }
                     .podium-2 td { font-weight: bold; color: #cccccc; }
                     .podium-3 td { font-weight: bold; color: #cd7f32; }
                     
-                    /* Styling voor de tijdstempel linksonder */
-                    .tijdstempel { position: fixed; bottom: 2vh; left: 2vw; font-size: 1.8vh; color: #7f8c8d; font-style: italic; }
+                    .tijdstempel { position: fixed; bottom: 1vh; left: 2vw; font-size: 1.8vh; color: #7f8c8d; font-style: italic; }
                 </style>
             </head>
             <body>
@@ -48,6 +52,8 @@
 <tr><td>13</td><td>Dirk</td><td><strong>0</strong></td></tr>
 <tr><td>14</td><td>Shahmy</td><td><strong>0</strong></td></tr>
 <tr><td>15</td><td>Ralph</td><td><strong>0</strong></td></tr>
+<tr><td>16</td><td>Joyce</td><td><strong>0</strong></td></tr>
+<tr><td>17</td><td>Ričards</td><td><strong>0</strong></td></tr>
 
                             </tbody>
                         </table>
@@ -60,9 +66,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td>16</td><td>Joyce</td><td><strong>0</strong></td></tr>
-<tr><td>17</td><td>Ričards</td><td><strong>0</strong></td></tr>
-<tr><td>18</td><td>Jasper</td><td><strong>0</strong></td></tr>
+                                <tr><td>18</td><td>Jasper</td><td><strong>0</strong></td></tr>
 <tr><td>19</td><td>Rik</td><td><strong>0</strong></td></tr>
 <tr><td>20</td><td>Daan</td><td><strong>0</strong></td></tr>
 <tr><td>21</td><td>Rafi</td><td><strong>0</strong></td></tr>
@@ -75,12 +79,15 @@
 <tr><td>28</td><td>Viola</td><td><strong>0</strong></td></tr>
 <tr><td>29</td><td>Feyyaz</td><td><strong>0</strong></td></tr>
 <tr><td>30</td><td>Jonathan</td><td><strong>0</strong></td></tr>
+<tr><td>31</td><td>Dave</td><td><strong>0</strong></td></tr>
+<tr><td>32</td><td>Nick</td><td><strong>0</strong></td></tr>
+<tr><td>33</td><td>Fennie</td><td><strong>0</strong></td></tr>
 
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="tijdstempel">Last updated: 10-06-2026 10:42</div>
+                <div class="tijdstempel">Last updated: 10-06-2026 10:44</div>
             </body>
         </html>
         
