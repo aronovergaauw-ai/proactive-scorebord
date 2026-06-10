@@ -2,7 +2,7 @@ name: Update Scorebord
 
 on:
   schedule:
-    - cron: '*/30 * * * *' # Laat het script elke 30 minuten draaien
+    - cron: '*/10 * * * *' # Laat het script elke 30 minuten draaien
   workflow_dispatch: # Zorgt dat we het ook handmatig kunnen starten met een knop
 
 jobs:
