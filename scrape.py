@@ -26,21 +26,20 @@ def haal_scores_op():
         data = response_info.value.json()
         deelnemers = data.get('users', [])
         
-        # 4. Sorteer deelnemers op punten (hoogste eerst)
+        # 4. Sorteer deelnemers op punten
         deelnemers.sort(key=lambda x: x.get('points', 0), reverse=True)
 
-        # --- Filter ongewenste namen ('beheerder') eruit ---
+        # Filter 'beheerder' eruit
         namen_uitsluiten = ["beheerder"]
-        
         deelnemers = [
             user for user in deelnemers 
             if not any(naam in user.get('name', '').lower() for naam in namen_uitsluiten)
         ]
 
-        # Beperk de lijst tot de TOP 30
-        deelnemers = deelnemers[:30]
+        # --- AANGEPAST: Maximaal 40 deelnemers op het scherm ---
+        deelnemers = deelnemers[:40]
 
-        # 5. Splits de groep in tweeën voor de 2 kolommen
+        # 5. Splits de groep
         midden = (len(deelnemers) + 1) // 2
         groep1 = deelnemers[:midden]
         groep2 = deelnemers[midden:]
@@ -57,7 +56,6 @@ def haal_scores_op():
             
             return f"<tr{rij_class}><td>{positie}</td><td>{voornaam}</td><td><strong>{punten}</strong></td></tr>\n"
 
-        # Bouw de twee losse tabellen op
         tabel1_rijen = ""
         for i, user in enumerate(groep1, start=1):
             tabel1_rijen += bouw_rij(user, i)
@@ -66,31 +64,34 @@ def haal_scores_op():
         for i, user in enumerate(groep2, start=midden + 1):
             tabel2_rijen += bouw_rij(user, i)
 
-        # --- Bepaal de huidige tijd (Nederlandse zomertijd: UTC + 2) ---
         nu = datetime.utcnow() + timedelta(hours=2)
         tijdstempel = nu.strftime("%d-%m-%Y %H:%M")
 
-        # 6. Bouw de HTML
+        # 6. Bouw de HTML (Extra compacte CSS & Snellere verversing)
         webpagina = f"""
         <html>
             <head>
                 <title>World Cup Scoreboard</title>
-                <meta http-equiv="refresh" content="900"> 
+                <meta http-equiv="refresh" content="300"> 
                 <style>
-                    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 2vh 2vw; color: #e0e0e0; overflow: hidden; }}
-                    h1 {{ text-align: center; color: #ffffff; font-size: 5vh; margin: 1vh 0 2vh 0; letter-spacing: 2px; text-transform: uppercase; }}
-                    .container {{ background: #1e1e1e; padding: 2vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; }}
+                    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; margin: 0; padding: 1.5vh 2vw; color: #e0e0e0; overflow: hidden; }}
+                    
+                    /* Titels en marges iets kleiner gemaakt voor meer ruimte */
+                    h1 {{ text-align: center; color: #ffffff; font-size: 4vh; margin: 0.5vh 0 1.5vh 0; letter-spacing: 2px; text-transform: uppercase; }}
+                    .container {{ background: #1e1e1e; padding: 1.5vh 3vw; border-radius: 20px; width: 95vw; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); box-sizing: border-box; position: relative; }}
                     .twee-kolommen {{ display: flex; gap: 4vw; justify-content: space-between; }}
-                    table {{ width: 48%; border-collapse: collapse; font-size: 2.6vh; }}
-                    th, td {{ padding: 1vh 1.5vw; text-align: left; border-bottom: 2px solid #333333; }}
-                    th {{ background-color: #2c3e50; color: #ffffff; font-size: 3vh; text-transform: uppercase; }}
+                    
+                    /* Tabelrijen en tekst compacter gemaakt (20 rijen per kolom) */
+                    table {{ width: 48%; border-collapse: collapse; font-size: 2.2vh; }}
+                    th, td {{ padding: 0.6vh 1vw; text-align: left; border-bottom: 1px solid #333333; }}
+                    th {{ background-color: #2c3e50; color: #ffffff; font-size: 2.4vh; text-transform: uppercase; padding: 1vh 1vw; }}
                     tr:nth-child(even) {{ background-color: #252525; }}
+                    
                     .podium-1 td {{ font-weight: bold; background-color: #3a2e00; color: #ffd700; }}
                     .podium-2 td {{ font-weight: bold; color: #cccccc; }}
                     .podium-3 td {{ font-weight: bold; color: #cd7f32; }}
                     
-                    /* Styling voor de tijdstempel linksonder */
-                    .tijdstempel {{ position: fixed; bottom: 2vh; left: 2vw; font-size: 1.8vh; color: #7f8c8d; font-style: italic; }}
+                    .tijdstempel {{ position: fixed; bottom: 1vh; left: 2vw; font-size: 1.8vh; color: #7f8c8d; font-style: italic; }}
                 </style>
             </head>
             <body>
